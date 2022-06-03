@@ -23,7 +23,7 @@ Shortest path between all vertices: Floyd-Warshall and Johnson algorithms </code
 Course matching<pre><code>Fingerprint-based method, Robin-Carp algorithm
 String matching by automata: Knuth-Maurice-Perth algorithm 
 </code></pre></p>
-<p>Flow networks<pre><code>Maximum flux and minimum shear: Ford-Falkerson algorithm
+<p>Flow networks<pre><code>Maximum flow and minimum flow: Ford-Falkerson algorithm
 Improvements to the Ford-Falkerson algorithm, improvements to Edmunds and Carp
 Types and applications: Adaptation in two-part graph, separate paths, matrix rounding</code></pre></p>
 <p>Linear programming<pre><code>Standard form, problem modeling with linear programming
