@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int dp[502][502][102];
+int a[502][502];
+
+const int INF = 1e9+7;
+
+int main(){
+    int n,k;
+    cin>>n>>k;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>a[i][j];
+        }
+    }
+    for(int i=1;i<=n;i++){
+        dp[1][i][0] = a[1][i];
+    }
+    for(int i=2;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            dp[i][j][0] = max(dp[i-1][j-1][0],dp[i-1][j+1][0]) + a[i][j];
+            for(int l=1;l<=min(k,i-1);l++){
+                dp[i][j][l] = max(dp[i-1][j-1][l],max(dp[i-1][j+1][l],dp[i-1][j][l-1])) + a[i][j];
+            }
+        }
+    }
+    int ans = 0;
+    for(int i=1;i<=n;i++){
+        for(int j=0;j<=min(k,n-1);j++){
+            ans = max(ans,dp[n][i][j]);
+        }
+    }
+    cout<<ans<<endl;
+}
