@@ -1,4 +1,4 @@
-# Design-Algorithm-ce403054
+# Algorithm Design-ce403054
 <p>Introduction and sample issues <pre><code>Solubility, analysis of algorithms, execution times
 The largest consecutive subordinate, problem 3-sum</code></pre></p>
 <p>Induction based algorithms<pre><code>Evaluation of polynomials, one-time mapping, famous star
