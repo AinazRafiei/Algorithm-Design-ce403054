@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn = 5e5 + 10;
+#define pii pair<int,int>
+#define fir first
+#define sec second
+pair<pii,int> edg[maxn];
+int n,m,q;
+int p[maxn],dep[maxn],ans[maxn];
+vector<pii> qry[maxn];
+vector<int> tot[maxn];
+int find(int x) {
+	return x == p[x] ? x : find(p[x]);
+}
+void merge(int x,int y) {
+	int fx = find(x),fy = find(y);
+	if(fx == fy) return;
+	if(dep[fx] > dep[fy]) swap(fx,fy);
+	if(dep[fx] + 1 > dep[fy]) dep[fy]++;
+	p[fx] = fy;
+}
+void solve(int w,int l,int r) {
+	vector<pair<int,pii>> sta;
+	for(int i = l; i <= r; i++) {
+    
+		int x = qry[w][i].sec;
+		int fx = find(edg[x].fir.fir),fy = find(edg[x].fir.sec);
+		if(fx == fy) {
+    
+			ans[qry[w][i].fir] = 1;
+		} else {
+    
+			if(dep[fx] > dep[fy]) swap(fx,fy);
+			sta.push_back(make_pair(fx,pii(fy,dep[fy])));
+			if(dep[fx] + 1 > dep[fy]) dep[fy] = dep[fx] + 1;
+			p[fx] = fy;
+		}
+	}
+	reverse(sta.begin(),sta.end());
+	for(auto it : sta) { 
+		p[it.fir] = it.fir;
+		dep[it.sec.fir] = it.sec.sec;
+	}
+}
+int main() {
+    
+	scanf("%d%d",&n,&m);
+	for(int i = 1; i <= n; i++)
+		p[i] = i;
+	for(int i = 1,u,v,w; i <= m; i++) {
+    
+		scanf("%d%d%d",&u,&v,&w);
+		edg[i] = make_pair(pii(u,v),w);
+		tot[w].push_back(i);
+	}
+	scanf("%d",&q);
+	for(int i = 1; i <= q; i++) {
+    
+		int k;scanf("%d",&k);
+		for(int j = 1,x; j <= k; j++) {
+    
+			scanf("%d",&x);
+			qry[edg[x].sec].push_back(pii(i,x));
+		}
+	}
+	for(int i = 1; i <= maxn - 10; i++) {
+		for(int l = 0,r; l < qry[i].size(); l = r + 1) {
+			r = l;
+			while(r + 1 < qry[i].size() && qry[i][r + 1].fir == qry[i][r].fir) r++;
+			solve(i,l,r);
+		}
+		for(auto it : tot[i]) {
+			int u = edg[it].fir.fir;
+			int v = edg[it].fir.sec;
+			merge(u,v);
+		}
+	}
+	for(int i = 1; i <= q; i++) {
+		if(ans[i] == 1) puts("NO");
+		else puts("YES");
+	}
+	return 0;
+}
