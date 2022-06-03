@@ -1,0 +1,132 @@
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class ZeroOne{
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader()
+        {
+            br = new BufferedReader(
+                    new InputStreamReader(System.in));
+        }
+
+        String next()
+        {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() { return Integer.parseInt(next()); }
+
+        long nextLong() { return Long.parseLong(next()); }
+
+        double nextDouble()
+        {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine()
+        {
+            String str = "";
+            try {
+                str = br.readLine();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+
+        public void close() {
+
+        }
+    }
+
+    private static void sort(int start, int end, boolean[] numbers, ArrayList<Integer[]> changes){
+        if(start >= end){
+            return ;
+        }
+        int mid = (int)((start + end)/2);
+        sort(start,mid,numbers,changes);
+        sort(mid+1,end,numbers,changes);
+        int leftPointer = mid;
+        int rightPointer = mid+1;
+        boolean rightChanged = false;
+        boolean leftChanged = false;
+        while(true){
+            if(numbers[rightPointer] == false){
+                rightPointer ++;
+                rightChanged = true;
+            }else{
+                break;
+            }
+            if(rightPointer > end){
+                break;
+            }
+        }
+        while(true){
+            if(numbers[leftPointer] == true){
+                leftPointer --;
+                leftChanged = true;
+            }else{
+                break;
+            }
+            if(leftPointer < start){
+                break;
+            }
+        }
+        leftPointer +=2;
+        if(rightChanged && leftChanged){
+            Integer[] change = new Integer[2];
+            change[0] = leftPointer;
+            change[1] = rightPointer;
+            changes.add(change);
+
+            leftPointer --;
+            rightPointer --;
+            while(rightPointer > leftPointer){
+                boolean t;
+                t = numbers[rightPointer];
+                numbers[rightPointer] = numbers[leftPointer];
+                numbers[leftPointer] = t;
+                rightPointer --;
+                leftPointer ++;
+            }
+        }
+    }
+    public static void main(String[] args) {
+        
+        FastReader s = new FastReader();
+        int n = s.nextInt();
+        boolean[] numbers = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            int a = s.nextInt();
+            if(a == 1)
+                numbers[i] = true;
+            else
+                numbers[i] = false;
+        }
+        s.close();
+        StringBuilder answer =  new StringBuilder("");
+        ArrayList<Integer[]> changes = new ArrayList<>();
+        sort(0, n-1, numbers, changes);
+        System.out.println(changes.size());
+        for (Integer[] change : changes) {
+            answer.append(change[0] + " " + change[1]+"\n") ;
+        }
+        System.out.print(answer);
+    }
+
+}
