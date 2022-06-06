@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+#define bit(n, k) (((n)>>(k))&1)
+using namespace std;
+
+const int maxn = 14 + 1;
+
+int adj[maxn];
+int dp[maxn][(1 << maxn) + 10][maxn];
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+	int n, m;
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		int v, u;
+		cin >> v >> u;
+		v--, u--;
+		adj[v] |= (1 << u);
+		adj[u] |= (1 << v);
+	}
+	for (int v = 0; v < n; v++)
+		dp[v][(1 << v)][v] = 1;
+	for (int mask = 0; mask < (1 << n); mask++)
+		for (int v = 0; v < n; v++) 
+			for (int u = 0; u < n; u++) 
+				if (bit(mask, v) and bit(mask, u) and v != u)
+					for (int w = 0; w < n; w++) 
+						if (bit(mask, w) and bit(adj[u], w) and u != w)
+							dp[v][mask][u] |= dp[v][mask ^ (1 << u)][w];
+	for (int v = 0; v < n; v++) {
+		for (int u = 0; u < n; u++) {
+			int ans = 0;
+			for (int mask = 0; mask < (1 << n); mask++)
+				if (dp[v][mask][u])
+					ans = max(ans, __builtin_popcount(mask) - 1);
+			cout << ans << " \n"[u == n - 1];
+		}
+	}
+}
